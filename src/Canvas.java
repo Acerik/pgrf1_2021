@@ -71,6 +71,7 @@ public class Canvas {
         clear();
         lineRasterizer.rasterize(10,10,100,50);
         lineRasterizer.rasterize(20,20,120,70);
+        lineRasterizer.rasterize(110,60,120,200);
         //drawline(210, 20, 300, 20);
     }
 
