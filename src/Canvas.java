@@ -1,3 +1,8 @@
+import raster.Raster;
+import raster.RasterBufferedImage;
+import rasterize.LineRasterizeTrivial;
+import rasterize.LineRasterizer;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +25,9 @@ public class Canvas {
 
     private JFrame frame;
     private JPanel panel;
-    private BufferedImage img;
+    //private BufferedImage img;
+    private Raster raster;
+    private LineRasterizer lineRasterizer;
 
     public Canvas(int width, int height) {
         frame = new JFrame();
@@ -30,7 +37,10 @@ public class Canvas {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        raster = new RasterBufferedImage(width, height);
+        lineRasterizer = new LineRasterizeTrivial(raster);
+
+        //img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         panel = new JPanel() {
             private static final long serialVersionUID = 1L;
@@ -50,21 +60,21 @@ public class Canvas {
     }
 
     public void clear() {
-        Graphics gr = img.getGraphics();
-        gr.setColor(new Color(0x2f2f2f));
-        gr.fillRect(0, 0, img.getWidth(), img.getHeight());
+        raster.clear();
     }
 
     public void present(Graphics graphics) {
-        graphics.drawImage(img, 0, 0, null);
+        ((RasterBufferedImage)raster).present(graphics);
     }
 
     public void draw() {
         clear();
-        drawline(10, 10, 100, 50);
+        lineRasterizer.rasterize(10,10,100,50);
+        lineRasterizer.rasterize(20,20,120,70);
         //drawline(210, 20, 300, 20);
     }
 
+    /*
     public void drawline(int x1, int y1, int x2, int y2) {
         float k,q;
 
@@ -75,6 +85,7 @@ public class Canvas {
             img.setRGB(x, (int)y, 0xffff00);
         }
     }
+     */
 
     public void start() {
         draw();
