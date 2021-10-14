@@ -10,7 +10,7 @@ public class LineRasterizeTrivial extends LineRasterizer{
 
     @Override
     public void rasterize(int x1, int y1, int x2, int y2) {
-        /*
+
         float k,q;
 
         k=((float)(y2-y1)/(x2-x1));
@@ -20,7 +20,7 @@ public class LineRasterizeTrivial extends LineRasterizer{
             //img.setRGB(x, (int)y, 0xffff00);
             raster.setPixel(x, (int) y,0xffff00);
         }
-        */
+        /*
         float k,q;
         k = ((float)(y2-y1)/(x2-x1));
         if(Math.abs(y2-y1) < Math.abs(x2-x1)){ // zjištění řídící osy
@@ -54,6 +54,8 @@ public class LineRasterizeTrivial extends LineRasterizer{
                 raster.setPixel((int) x, (int) y,0xffff00);
             }
         }
+
+         */
 
     }
 }
