@@ -1,4 +1,5 @@
 
+import fill.SeedFiller;
 import model.Line;
 import raster.Raster;
 import raster.RasterBufferedImage;
@@ -75,8 +76,13 @@ public class CanvasMouse {
 					y1 = e.getY();
 					//raster.setPixel(e.getX(), e.getY(), 0xffff00);
 				}
-				if (e.getButton() == MouseEvent.BUTTON2)
-					raster.setPixel(e.getX(), e.getY(), 0xff00ff);
+				if (e.getButton() == MouseEvent.BUTTON2) {
+					SeedFiller seedFiller = new SeedFiller(raster); // dodělat implementaci
+					seedFiller.setSeedX(e.getX());
+					seedFiller.setSeedY(e.getY());
+					seedFiller.setBackgroundColor(raster.getPixel(e.getX(),e.getY()));
+					seedFiller.fill();
+				}
 				if (e.getButton() == MouseEvent.BUTTON3)
 					raster.setPixel(e.getX(), e.getY(), 0xffffff);
 				panel.repaint();
