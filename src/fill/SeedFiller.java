@@ -14,6 +14,7 @@ public class SeedFiller extends Filler{
 
     @Override
     public void fill() {
+        backgroundColor = raster.getPixel(seedX, seedY);
         seed(seedX, seedY, 0x00FFFF);
     }
 
