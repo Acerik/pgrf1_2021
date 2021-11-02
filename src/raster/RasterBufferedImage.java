@@ -11,18 +11,29 @@ public class RasterBufferedImage implements Raster{
         this.img = img;
     }
 
+    private int background;
+
     public RasterBufferedImage(int width, int height){
         img = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
     }
 
     @Override
     public void setPixel(int x, int y, int color) {
-        img.setRGB(x, y, color);
+        if(checkPoint(x,y)) {
+            img.setRGB(x, y, color);
+        }
     }
 
     @Override
     public int getPixel(int x, int y) {
-        return img.getRGB(x,y);
+        if(checkPoint(x,y)) {
+            return img.getRGB(x, y);
+        }
+        return background;
+    }
+
+    public boolean checkPoint(int x, int y){
+        return (x < getWidth() && x>= 0 && y>=0 && y < getHeight());
     }
 
     @Override
