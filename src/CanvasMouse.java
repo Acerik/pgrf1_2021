@@ -6,13 +6,13 @@ import raster.RasterBufferedImage;
 import rasterize.LineRasterizeBufferImage;
 import rasterize.LineRasterizeTrivial;
 import rasterize.LineRasterizer;
+import transforms.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,9 @@ public class CanvasMouse {
 	//private BufferedImage img;
 	private Raster raster;
 	private LineRasterizer lineRasterizer;
+
+	private Mat3 trans = new Mat3Identity(); //Mat3Transl2D(100, -50);
+
 
 	private int x1, y1;
 
@@ -83,8 +86,12 @@ public class CanvasMouse {
 					seedFiller.setBackgroundColor(raster.getPixel(e.getX(),e.getY()));
 					seedFiller.fill();
 				}
-				if (e.getButton() == MouseEvent.BUTTON3)
-					raster.setPixel(e.getX(), e.getY(), 0xffffff);
+				if (e.getButton() == MouseEvent.BUTTON3){
+					clear();
+					//trans = trans.mul(new Mat3Rot2D(0.1));
+					trans = trans.mul(new Mat3Transl2D(20, 20));
+					draw();
+				}
 				panel.repaint();
 			}
 
@@ -93,6 +100,7 @@ public class CanvasMouse {
 				if(e.getButton() == MouseEvent.BUTTON1){
 					lineRasterizer.rasterize(x1,y1, e.getX(), e.getY());
 					lines.add(new Line(x1, y1, e.getX(), e.getY()));
+
 				}
 				panel.repaint();
 			}
@@ -107,11 +115,29 @@ public class CanvasMouse {
 				draw();
 			}
 		});
+
+		panel.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_A){
+					trans = trans.mul(new Mat3Rot2D(0.1));
+					draw();
+				}
+			}
+		});
+		frame.requestFocus();
+		frame.requestFocusInWindow();
 	}
 
 	public void draw(){
-		for(int x = 0; x < lines.size(); x++){
-			lineRasterizer.rasterize(lines.get(x));
+		for(Line line : lines){
+			Point2D a = new Point2D(line.getX1(), line.getY1());
+			Point2D b = new Point2D(line.getX2(), line.getY2());
+			a = a.mul(trans);
+			b = b.mul(trans);
+			Line newLine = new Line((int)a.getX(), (int)a.getY(), (int)b.getX(), (int)b.getY());
+			lineRasterizer.rasterize(line);
+			lineRasterizer.rasterize(newLine);
 		}
 		panel.repaint();
 	}

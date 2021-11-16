@@ -56,7 +56,10 @@ public class ScanLineFiller extends Filler {
                 }
             }
             // seradit podle x souradnice (průsečíky) vlastní algoritmus bubblesort (složitější za bonus. bod napsat důvod(quicksort))
-            Collections.sort(intersections);
+
+            qSort(intersections, 0, intersections.size() - 1);
+
+            //Collections.sort(intersections);
             // spojím sudý s lichým
             for(int i = 0; i < intersections.size()-1; i += 2){
                 int x1 = intersections.get(i);
@@ -66,6 +69,43 @@ public class ScanLineFiller extends Filler {
                 }
             }
         }
+    }
+
+    private static void qSort(List<Integer> arr, int low, int high) {
+        if (low < high) {
+            /* pi is partitioning index, arr[pi] is
+            now at right place */
+            int pi = partition(arr, low, high);
+
+            // Recursively sort elements before
+            // partition and after partition
+            qSort(arr, low, pi - 1);
+            qSort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(List<Integer> arr, int low, int high) {
+        int pivot = arr.get(high);
+        int i = (low - 1); // index of smaller element
+        for (int j = low; j <= high - 1; j++) {
+            // If current element is smaller than or
+            // equal to pivot
+            if (arr.get(j) <= pivot) {
+                i++;
+
+                // swap arr[i] and arr[j]
+                int temp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, temp);
+            }
+        }
+
+        // swap arr[i+1] and arr[high] (or pivot)
+        int temp = arr.get(i + 1);
+        arr.set(i+1, arr.get(high));
+        arr.set(high, temp);
+
+        return i + 1;
     }
 
     private class BorderLine {
