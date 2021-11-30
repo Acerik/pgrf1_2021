@@ -10,6 +10,10 @@ public abstract class LineRasterizer {
         this.raster = raster;
     }
 
+    public Raster getRaster(){
+        return this.raster;
+    }
+
     public void rasterize(int x1, int y1, int x2, int y2){
 
     }

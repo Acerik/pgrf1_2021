@@ -1,6 +1,11 @@
 
+import Render.EdgeRenderer;
+import Render.Renderer;
 import fill.SeedFiller;
 import model.Line;
+import model.Point;
+import model3D.Edge;
+import model3D.Solid;
 import raster.Raster;
 import raster.RasterBufferedImage;
 import rasterize.LineRasterizeBufferImage;
@@ -41,6 +46,14 @@ public class CanvasMouse {
 	private int x1, y1;
 
 	private List<Line> lines;
+
+	private Mat4 model = new Mat4Identity();
+
+	Camera camera = new Camera()
+			.withPosition(new Vec3D(10,0,0))
+			.withAzimuth(Math.PI)
+			.withZenith(Math.PI/2)
+			.withFirstPerson(true);
 
 	public CanvasMouse(int width, int height) {
 		JFrame frame = new JFrame();
@@ -123,6 +136,23 @@ public class CanvasMouse {
 					trans = trans.mul(new Mat3Rot2D(0.1));
 					draw();
 				}
+				double step = 0.1;
+				if(e.getKeyCode() == KeyEvent.VK_LEFT){
+					camera = camera.left(step);
+				}
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					camera = camera.right(step);
+				}
+				if(e.getKeyCode() == KeyEvent.VK_UP){
+					camera = camera.up(step);
+				}
+				if(e.getKeyCode() == KeyEvent.VK_DOWN){
+					camera = camera.down(step);
+				}
+				if(e.getKeyCode() == KeyEvent.VK_M){
+					model = model.mul(new Mat4());
+				}
+				draw();
 			}
 		});
 		frame.requestFocus();
@@ -139,6 +169,22 @@ public class CanvasMouse {
 			lineRasterizer.rasterize(line);
 			lineRasterizer.rasterize(newLine);
 		}
+		EdgeRenderer edgeRenderer = new EdgeRenderer();
+		edgeRenderer.setRasterizer(lineRasterizer);
+		Vec3D pos = new Vec3D(10,0,0);
+		Vec3D v = new Vec3D(-1,0,0);
+		Vec3D up = new Vec3D(0,-1,0);
+		Mat4 view = new Mat4ViewRH(pos, v, up);
+		//edgeRenderer.setView(view);
+
+		edgeRenderer.setModel(model);
+		edgeRenderer.setView(camera.getViewMatrix());
+		edgeRenderer.setProjection(new Mat4OrthoRH(6,4, 0.1, 30));
+		//Point3D a = new Point3D(-1,1,0);
+		//Point3D b = new Point3D(1,-1,0);
+		//edgeRenderer.render(a,b);
+		Solid solid = new Edge();
+		edgeRenderer.render(solid);
 		panel.repaint();
 	}
 

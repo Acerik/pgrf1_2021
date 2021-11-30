@@ -2,11 +2,17 @@ package model3D;
 
 import transforms.Point3D;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Solid { // vytvořit těleso
+public class Solid {
     private List<Integer> indexBuffer;
     private List<Point3D> vertexBuffer;
+
+    public Solid(){
+        this.indexBuffer = new ArrayList<>();
+        this.vertexBuffer = new ArrayList<>();
+    }
 
     public List<Integer> getIndexBuffer() {
         return indexBuffer;
