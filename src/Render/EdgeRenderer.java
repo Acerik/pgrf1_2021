@@ -50,10 +50,12 @@ public class EdgeRenderer implements Renderer{
             vbTemp.add(temp);
         }
 
-        for(int i = 0; i < solid.getIndexBuffer().size(); i++){
-            int idx = i+1 % solid.getIndexBuffer().size();
+        Point3D a,b;
+        for(int i = 0;i < solid.getIndexBuffer().size()-1; i +=2){
+            a = vbTemp.get(solid.getIndexBuffer().get(i));
+            b = vbTemp.get(solid.getIndexBuffer().get(i + 1));
             //render(solid.getVertexBuffer().get(i), solid.getVertexBuffer().get(idx));
-            render(vbTemp.get(i), vbTemp.get(idx));
+            render(a,b);
         }
     }
 

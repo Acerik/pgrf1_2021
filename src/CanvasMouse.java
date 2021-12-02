@@ -52,7 +52,7 @@ public class CanvasMouse {
 	Camera camera = new Camera()
 			.withPosition(new Vec3D(10,0,0))
 			.withAzimuth(Math.PI)
-			.withZenith(Math.PI/2)
+			.withZenith(0)
 			.withFirstPerson(true);
 
 	public CanvasMouse(int width, int height) {
@@ -132,6 +132,9 @@ public class CanvasMouse {
 		panel.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				System.out.println("dsadasd");
+				super.keyPressed(e);
+				System.out.println("asd");
 				if(e.getKeyCode() == KeyEvent.VK_A){
 					trans = trans.mul(new Mat3Rot2D(0.1));
 					draw();
@@ -152,6 +155,7 @@ public class CanvasMouse {
 				if(e.getKeyCode() == KeyEvent.VK_M){
 					model = model.mul(new Mat4());
 				}
+				System.out.println("key");
 				draw();
 			}
 		});
